@@ -100,8 +100,8 @@ API_URL=your_api_url
 
 ## Screenshots
 
-![Dashboard Preview 1](screenshots/img1.png)
-![Dashboard Preview 2](screenshots/img2.png)
+![Dashboard Preview 1](Screenshots/img1.png)
+![Dashboard Preview 2](Screenshots/img2.png)
 
 ---
 
