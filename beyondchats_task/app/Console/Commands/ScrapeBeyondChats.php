@@ -101,28 +101,42 @@ class ScrapeBeyondChats extends Command
 
     private function scrapeArticle($driver, $url)
     {
-        if (Article::where('url', $url)->exists()) {
-            $this->line("Skipping existing: $url");
-            return;
-        }
-
-        $driver->get($url);
-        // Slight pause to let JS render
-        usleep(500000); 
+        // 1. Skip if already exists
+        if (Article::where('url', $url)->exists()) return;
 
         try {
+            $driver->get($url);
+            // Wait 3 seconds for the page to fully render
+            usleep(3000000); 
+
+            // 2. Get Title
             $title = $driver->findElement(WebDriverBy::tagName('h1'))->getText();
-            // Try different selectors for content
-            $content = $driver->findElement(WebDriverBy::cssSelector('.entry-content, .post-content, article'))->getAttribute('innerHTML');
+
+            // 3. BRUTE FORCE: Execute JavaScript to get all visible text
+            // This bypasses complex HTML structures
+            $content = $driver->executeScript("return document.body.innerText;");
+
+            // Clean up the text (limit length to avoid database errors)
+            $content = substr(trim($content), 0, 5000);
+
+            // 4. Validate
+            if (strlen($content) < 100) {
+                $content = "Error: Page loaded but content was empty. Possible bot protection.";
+            } else {
+                // Convert newlines to HTML breaks for display
+                $content = nl2br(e($content));
+            }
 
             Article::create([
                 'title' => $title,
                 'url' => $url,
                 'original_content' => $content
             ]);
+            
             $this->info("Saved: $title");
+
         } catch (\Exception $e) {
-            $this->warn("Could not parse: $url");
+            $this->warn("Skipped: $url - " . $e->getMessage());
         }
     }
 }
