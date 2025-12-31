@@ -9,7 +9,7 @@ function App() {
 
   // Fetch articles on load
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/articles')
+    axios.get(import.meta.env.VITE_API_URL)
       .then(response => {
         setArticles(response.data);
         if (response.data.length > 0) setSelectedArticle(response.data[0]);
