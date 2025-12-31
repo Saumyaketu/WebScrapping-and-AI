@@ -27,6 +27,48 @@ A Full-Stack application that automates content research. It scrapes blog articl
 2.  **AI Processing:** A Node.js worker listens for new articles, sends the text to **Google Gemini AI** for enhancement, and updates the database with the improved version.
 3.  **Presentation:** The React Frontend fetches the data via API and displays a side-by-side comparison (Original Draft vs. AI Enhanced).
 
+```mermaid
+graph TD
+    User["User / Client"] -->|View Dashboard| Frontend["React Frontend (Vercel)"]
+    Frontend -->|Fetch Articles API| Backend["Laravel Backend API (Render)"]
+
+    subgraph "Data Processing Pipeline"
+        Backend <-->|Read/Write Data| DB[("PostgreSQL Database")]
+
+        Scraper["Laravel Dusk Scraper"] -->|1. Scrape Content| TargetWeb["BeyondChats Blog"]
+        Scraper -->|2. Store Raw Data| DB
+
+        Worker["Node.js AI Worker"] -->|3. Poll for New Articles| Backend
+        Worker -->|4. Send Text| AI["Google Gemini AI"]
+        AI -->|5. Return Enhanced Content| Worker
+        Worker -->|6. Update Article| Backend
+    end
+```
+---
+
+## Project Structure
+```text
+my-submission-repo/
+│
+├── beyondchats_task/       # Laravel Backend (API & Scraper)
+│   ├── app/
+│   ├── routes/
+│   └── ...
+│
+├── frontend/               # React Frontend (Dashboard)
+│   ├── src/
+│   ├── package.json
+│   └── ...
+│
+├── ai_worker/              # Node.js Worker (AI Logic)
+│   ├── worker.js
+│   ├── package.json
+│   └── ...
+│
+├── README.md               # Project Documentation
+└── Screenshots             # Images of DashBoard
+
+```
 ---
 
 ## Getting Started (Run Locally)
