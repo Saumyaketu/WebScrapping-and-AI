@@ -5,8 +5,35 @@
 }
 
 body {
-  background-image: radial-gradient(#e0e7ff 1px, transparent 1px);
-  background-size: 24px 24px;
+  color: var(--color-slate-800);
+  background-color: #eef2ff;
+  background-image: 
+    radial-gradient(at 40% 20%, hsla(266, 51%, 90%, 1) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, hsla(189, 100%, 90%, 1) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(341, 100%, 92%, 1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, hsla(245, 100%, 93%, 1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(258, 59%, 92%, 1) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, hsla(240, 100%, 94%, 1) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, hsla(343, 100%, 94%, 1) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-indigo-200);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-indigo-400);
 }
 
 @keyframes fadeIn {
@@ -14,5 +41,5 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 } 
